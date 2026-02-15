@@ -1,6 +1,6 @@
 ---
 name: pinets
-description: Run Pine Script indicators from the command line using pinets-cli. Use when the user asks to run, execute, test, or analyze a Pine Script indicator, calculate technical analysis values, fetch market data for crypto symbols, or work with .pine files. Also use when the user wants RSI, SMA, EMA, MACD, Bollinger Bands, or other technical indicator values for a trading pair.
+description: Run Pine Script indicators from the command line using pinets-cli. Use when the user asks to run, execute, test, or analyze a Pine Script indicator, calculate technical analysis values, fetch market data for crypto symbols, or work with .pine files. Also use when the user wants RSI, SMA, EMA, MACD, Bollinger Bands, or other technical indicator values for a trading pair. This tool can run PineScript indicators from .pine files or stdin and output the resulting plots and variables data.
 ---
 
 # pinets-cli — Run Pine Script Indicators from the Terminal
@@ -39,34 +39,34 @@ The indicator can be a **file argument** or **piped from stdin**.
 
 ### Data source (one required)
 
-| Flag | Description |
-|------|-------------|
-| `-s, --symbol <ticker>` | Symbol from Binance (e.g., `BTCUSDT`, `ETHUSDT`, `SOLUSDT.P` for futures) |
-| `-t, --timeframe <tf>` | Candle timeframe: `1`, `5`, `15`, `30`, `60`, `120`, `240`, `1D`, `1W`, `1M` (default: `60`) |
-| `-d, --data <path>` | JSON file with candle data (alternative to `--symbol`) |
+| Flag                    | Description                                                                                  |
+| ----------------------- | -------------------------------------------------------------------------------------------- |
+| `-s, --symbol <ticker>` | Symbol from Binance (e.g., `BTCUSDT`, `ETHUSDT`, `SOLUSDT.P` for futures)                    |
+| `-t, --timeframe <tf>`  | Candle timeframe: `1`, `5`, `15`, `30`, `60`, `120`, `240`, `1D`, `1W`, `1M` (default: `60`) |
+| `-d, --data <path>`     | JSON file with candle data (alternative to `--symbol`)                                       |
 
 ### Output
 
-| Flag | Description |
-|------|-------------|
-| `-o, --output <path>` | Write to file instead of stdout |
+| Flag                  | Description                                                    |
+| --------------------- | -------------------------------------------------------------- |
+| `-o, --output <path>` | Write to file instead of stdout                                |
 | `-f, --format <type>` | `default` (plots only) or `full` (plots + result + marketData) |
-| `--pretty` | Pretty-print JSON |
-| `--clean` | Filter out null, false, and empty values from plot data |
-| `--plots <names>` | Comma-separated list of plot names to include (default: all) |
-| `-q, --quiet` | Suppress info messages (essential when parsing stdout) |
+| `--pretty`            | Pretty-print JSON                                              |
+| `--clean`             | Filter out null, false, and empty values from plot data        |
+| `--plots <names>`     | Comma-separated list of plot names to include (default: all)   |
+| `-q, --quiet`         | Suppress info messages (essential when parsing stdout)         |
 
 ### Candle control
 
-| Flag | Description |
-|------|-------------|
-| `-n, --candles <N>` | Number of output candles (default: `500`) |
-| `-w, --warmup <N>` | Extra warmup candles excluded from output (default: `0`) |
+| Flag                | Description                                              |
+| ------------------- | -------------------------------------------------------- |
+| `-n, --candles <N>` | Number of output candles (default: `500`)                |
+| `-w, --warmup <N>`  | Extra warmup candles excluded from output (default: `0`) |
 
 ### Debug
 
-| Flag | Description |
-|------|-------------|
+| Flag      | Description                                 |
+| --------- | ------------------------------------------- |
 | `--debug` | Show transpiled JavaScript code (to stderr) |
 
 ## Usage patterns
@@ -166,10 +166,10 @@ Adds `result` (raw return values) and `marketData` (OHLCV candles) to the defaul
 [
   {
     "openTime": 1704067200000,
-    "open": 42000.50,
-    "high": 42500.00,
-    "low": 41800.00,
-    "close": 42300.00,
+    "open": 42000.5,
+    "high": 42500.0,
+    "low": 41800.0,
+    "close": 42300.0,
     "volume": 1234.56,
     "closeTime": 1704070799999
   }
@@ -209,12 +209,12 @@ Every `plot()` call creates a named entry in the output JSON under `plots`.
 
 ## Warmup recommendations
 
-| Indicator | Minimum warmup |
-|-----------|---------------|
-| SMA(N) / EMA(N) | N |
-| RSI(14) | 30 |
-| MACD(12,26,9) | 50 |
-| Bollinger Bands(20) | 30 |
-| SMA(200) | 200+ |
+| Indicator           | Minimum warmup |
+| ------------------- | -------------- |
+| SMA(N) / EMA(N)     | N              |
+| RSI(14)             | 30             |
+| MACD(12,26,9)       | 50             |
+| Bollinger Bands(20) | 30             |
+| SMA(200)            | 200+           |
 
 Rule of thumb: set warmup to 1.5x-2x the longest lookback period in the indicator.
