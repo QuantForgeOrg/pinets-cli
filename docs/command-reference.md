@@ -126,6 +126,43 @@ pinets run rsi.pine -s BTCUSDT --pretty       # Always pretty
 pinets run rsi.pine -s BTCUSDT | jq '.'       # Auto-compact (piped)
 ```
 
+#### `--clean`
+
+Filter out null, false, and empty values from plot data arrays. Useful for signal-based indicators where most candles don't have values.
+
+```bash
+# Without --clean: Buy/Sell plots have 500 entries (mostly false)
+pinets run signals.pine -s BTCUSDT
+
+# With --clean: Only actual signals are included
+pinets run signals.pine -s BTCUSDT --clean
+```
+
+**When to use:**
+- Indicators with `plotshape`, `plotchar`, or `plotarrow` that only trigger occasionally
+- Reducing output size when most values are false/null
+- Extracting only meaningful signals
+
+#### `--plots <names>`
+
+Select specific plots to include in the output. Takes a comma-separated list of plot names (must match the titles from your Pine Script).
+
+```bash
+# Get only the Fast and Slow moving averages
+pinets run ma_cross.pine -s BTCUSDT --plots "Fast MA,Slow MA"
+
+# Get only the Buy signals
+pinets run signals.pine -s BTCUSDT --plots "Buy"
+
+# Combine with --clean to get only true signals
+pinets run signals.pine -s BTCUSDT --plots "Buy,Sell" --clean
+```
+
+**When to use:**
+- Your indicator has many plots but you only need specific ones
+- Building pipelines that process individual plots separately
+- Reducing output size and processing time
+
 ---
 
 ### Candle Control Options

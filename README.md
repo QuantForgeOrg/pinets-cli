@@ -39,6 +39,12 @@ No code to write. No project to set up. Just point it at a `.pine` file and go.
 npm install -g pinets-cli
 ```
 
+Or run directly without installing:
+
+```bash
+npx pinets-cli run sma_cross.pine --symbol BTCUSDT --timeframe 60
+```
+
 ### Run your first indicator
 
 Create a file called `sma_cross.pine`:
@@ -113,6 +119,8 @@ pinets run rsi.pine --data ./my_candles.json
 | `--output <path>` | `-o` | Write output to a file instead of stdout | stdout |
 | `--format <type>` | `-f` | Output format: `default` or `full` | `default` |
 | `--pretty` | &mdash; | Force pretty-printed JSON | auto |
+| `--clean` | &mdash; | Filter out null, false, and empty values from plots | &mdash; |
+| `--plots <names>` | &mdash; | Comma-separated list of plot names to include | all plots |
 
 ### Candle Control
 
@@ -190,6 +198,30 @@ pinets run rsi.pine --symbol BTCUSDT --format full --pretty
 
 ```bash
 pinets run my_indicator.pine --symbol BTCUSDT --debug
+```
+
+### Filter signals with --clean
+
+For indicators that generate signals (like crossovers), most candles will have `false` values. Use `--clean` to filter them out:
+
+```bash
+# Without --clean: 500 entries, mostly false
+pinets run ma_cross.pine -s BTCUSDT -t 1D -n 500
+
+# With --clean: Only actual signals
+pinets run ma_cross.pine -s BTCUSDT -t 1D -n 500 --clean
+```
+
+### Select specific plots
+
+When you only need specific plots from an indicator:
+
+```bash
+# Get only the Fast SMA (ignore Slow SMA)
+pinets run sma_cross.pine -s BTCUSDT --plots "Fast SMA"
+
+# Get only Buy and Sell signals
+pinets run signals.pine -s BTCUSDT --plots "Buy,Sell" --clean -q | jq '.plots'
 ```
 
 ---

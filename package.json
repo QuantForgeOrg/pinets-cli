@@ -1,6 +1,6 @@
 {
   "name": "pinets-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A CLI wrapper for PineTS that lets you run Pine Script indicators directly from the command line.",
   "keywords": [
     "Pine",
@@ -34,6 +34,7 @@
     "build": "cross-env BUILD=prod rollup -c",
     "build:dev": "cross-env BUILD=dev rollup -c",
     "build:prod": "cross-env BUILD=prod rollup -c",
+    "prepublishOnly": "npm run build:prod",
     "clean": "rimraf dist"
   },
   "devDependencies": {

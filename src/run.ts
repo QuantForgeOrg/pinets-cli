@@ -13,6 +13,8 @@ export interface RunOptions {
     output?: string;
     format: string;
     pretty?: boolean;
+    clean?: boolean;
+    plots?: string;
     candles: string;
     warmup: string;
     debug?: boolean;
@@ -143,7 +145,7 @@ export async function runCommand(file: string | undefined, options: RunOptions) 
         log(quiet, 'Done.');
 
         // ── 4. Format and write output ────────────────────────
-        const output = formatOutput(context, options.format, candles);
+        const output = formatOutput(context, options.format, candles, options.clean, options.plots);
 
         // Pretty-print: explicit flag > auto-detect
         //   --pretty     → always pretty

@@ -9,14 +9,22 @@ import path from 'path';
  * @param context  - The Context returned by pineTS.run()
  * @param format   - "default" (plots only) or "full" (plots + result + marketData)
  * @param candles  - How many output bars to include (taken from the end)
+ * @param clean    - Filter out null, false, and empty values from plot data
+ * @param plotFilter - Comma-separated list of plot names to include (undefined = all)
  */
-export function formatOutput(context: any, format: string, candles: number): any {
+export function formatOutput(
+    context: any,
+    format: string,
+    candles: number,
+    clean?: boolean,
+    plotFilter?: string,
+): any {
     switch (format) {
         case 'full':
-            return formatFull(context, candles);
+            return formatFull(context, candles, clean, plotFilter);
         case 'default':
         default:
-            return formatDefault(context, candles);
+            return formatDefault(context, candles, clean, plotFilter);
     }
 }
 
@@ -49,15 +57,37 @@ export function writeOutput(
  * Default format: indicator metadata + plots data.
  * Plots are trimmed to the last `candles` entries.
  */
-function formatDefault(context: any, candles: number): any {
+function formatDefault(context: any, candles: number, clean?: boolean, plotFilter?: string): any {
     const plots: Record<string, any> = {};
+    
+    // Parse plot filter into set of names
+    const includePlots = plotFilter 
+        ? new Set(plotFilter.split(',').map(s => s.trim()).filter(s => s.length > 0))
+        : null;
 
     for (const [title, plotData] of Object.entries(context.plots) as [string, any][]) {
-        const data: any[] = plotData.data;
+        // Skip if plot filter is active and this plot isn't in the list
+        if (includePlots && !includePlots.has(title)) {
+            continue;
+        }
+
+        let data: any[] = plotData.data;
+        
+        // Apply candle trimming first
+        data = data.length > candles ? data.slice(-candles) : data;
+        
+        // Apply cleaning filter if requested
+        if (clean) {
+            data = data.filter(entry => {
+                const val = entry.value;
+                return val !== null && val !== false && val !== undefined && val !== '';
+            });
+        }
+        
         plots[title] = {
             title: plotData.title,
             options: plotData.options,
-            data: data.length > candles ? data.slice(-candles) : data,
+            data,
         };
     }
 
@@ -71,8 +101,8 @@ function formatDefault(context: any, candles: number): any {
  * Full format: everything in default + result + marketData.
  * All arrays are trimmed to the last `candles` entries.
  */
-function formatFull(context: any, candles: number): any {
-    const defaultOutput = formatDefault(context, candles);
+function formatFull(context: any, candles: number, clean?: boolean, plotFilter?: string): any {
+    const defaultOutput = formatDefault(context, candles, clean, plotFilter);
 
     // ── Trim market data ──────────────────────────────────────
     const md: any[] = context.marketData;

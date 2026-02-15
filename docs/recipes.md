@@ -44,6 +44,84 @@ plot(ta.rsi(close, 14), "RSI")' | pinets run -s BTCUSDT -t 60 -n 10 -q --pretty
 
 ---
 
+## Filtering and Selecting Output
+
+### Filter out false/null values with --clean
+
+Signal-based indicators (using `plotshape`, `plotchar`, `plotarrow`) typically have many false values. Use `--clean` to keep only meaningful signals:
+
+```bash
+# Without --clean: 500 entries, mostly false
+pinets run ma_cross.pine -s BTCUSDT -t 1D -n 500
+
+# With --clean: Only actual crossover signals
+pinets run ma_cross.pine -s BTCUSDT -t 1D -n 500 --clean
+```
+
+Example output comparison:
+
+```json
+// Without --clean
+"Buy": {
+  "data": [
+    {"time": 1768608000000, "value": false},
+    {"time": 1768694400000, "value": false},
+    {"time": 1768780800000, "value": true},   // Signal!
+    {"time": 1768867200000, "value": false},
+    // ... 496 more entries
+  ]
+}
+
+// With --clean
+"Buy": {
+  "data": [
+    {"time": 1768780800000, "value": true},   // Only the signal
+  ]
+}
+```
+
+### Select specific plots with --plots
+
+When your indicator has many plots but you only need specific ones:
+
+```bash
+# Get only the RSI, ignore upper/lower bands
+pinets run rsi_bands.pine -s BTCUSDT --plots "RSI"
+
+# Get only Buy and Sell signals, ignore the moving averages
+pinets run ma_cross.pine -s BTCUSDT --plots "Buy,Sell"
+
+# Combine with --clean for optimal signal extraction
+pinets run signals.pine -s BTCUSDT --plots "Buy,Sell" --clean -q | \
+  jq '.plots'
+```
+
+### Count signals using --clean
+
+```bash
+# Count how many buy signals in the last 500 candles
+pinets run ma_cross.pine -s BTCUSDT -t 1D -n 500 --plots "Buy" --clean -q | \
+  jq '.plots.Buy.data | length'
+
+# Get timestamps of all sell signals
+pinets run signals.pine -s BTCUSDT --plots "Sell" --clean -q | \
+  jq '.plots.Sell.data[].time'
+```
+
+### Pipeline optimization
+
+Use both filters to minimize data transfer:
+
+```bash
+# Only get signals, exclude moving average plots
+pinets run complex_strategy.pine -s BTCUSDT -t 15 -n 1000 \
+  --plots "Buy Signal,Sell Signal" \
+  --clean \
+  -q | jq '.plots'
+```
+
+---
+
 ## Working with Multiple Symbols
 
 ### Bash loop

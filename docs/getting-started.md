@@ -21,13 +21,15 @@ pinets --version
 # 0.1.0
 ```
 
-### npx (no install)
+### npx (no install needed)
 
-You can also run without installing globally:
+You can also run without installing globally. `npx` downloads the package on first use and caches it:
 
 ```bash
-npx pinets-cli run my_indicator.pine --symbol BTCUSDT
+npx pinets-cli run my_indicator.pine --symbol BTCUSDT --timeframe 60
 ```
+
+When using `npx`, replace `pinets` with `npx pinets-cli` in all examples in this documentation.
 
 ---
 
