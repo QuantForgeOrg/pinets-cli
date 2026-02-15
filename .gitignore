@@ -1,3 +1,6 @@
+# Scratchpad (local dev/test files)
+.scratchpad/
+
 # Logs
 logs
 *.log

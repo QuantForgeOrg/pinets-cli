@@ -1,2 +1,316 @@
-# pinets-cli
-A CLI wrapper for PineTS that lets you run Pine Script indicators directly from the command line.
+<p align="center">
+  <strong>pinets-cli</strong><br>
+  Run Pine Script indicators from the command line
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/pinets-cli"><img src="https://img.shields.io/npm/v/pinets-cli.svg?style=flat-square" alt="npm version"></a>
+  <a href="https://opensource.org/licenses/AGPL-3.0"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg?style=flat-square" alt="License"></a>
+  <a href="https://github.com/QuantForgeOrg/PineTS"><img src="https://img.shields.io/badge/powered%20by-PineTS-blue?style=flat-square" alt="Powered by PineTS"></a>
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick Start</a> &bull;
+  <a href="#usage">Usage</a> &bull;
+  <a href="#options">Options</a> &bull;
+  <a href="#examples">Examples</a> &bull;
+  <a href="docs/README.md">Full Docs</a>
+</p>
+
+---
+
+## What is pinets-cli?
+
+**pinets-cli** is a command-line interface for [PineTS](https://github.com/QuantForgeOrg/PineTS), the open-source Pine Script transpiler and runtime. It lets you execute TradingView Pine Script indicators directly from your terminal, with live market data or custom JSON datasets.
+
+```bash
+pinets run rsi.pine --symbol BTCUSDT --timeframe 60
+```
+
+No code to write. No project to set up. Just point it at a `.pine` file and go.
+
+---
+
+## Quick Start
+
+### Install
+
+```bash
+npm install -g pinets-cli
+```
+
+### Run your first indicator
+
+Create a file called `sma_cross.pine`:
+
+```pinescript
+//@version=5
+indicator("SMA Cross", overlay=true)
+fast = ta.sma(close, 9)
+slow = ta.sma(close, 21)
+plot(fast, "Fast SMA", color=color.blue)
+plot(slow, "Slow SMA", color=color.red)
+```
+
+Run it:
+
+```bash
+pinets run sma_cross.pine --symbol BTCUSDT --timeframe 60
+```
+
+That's it. You'll get JSON output with the calculated SMA values for the last 500 hourly candles.
+
+---
+
+## Usage
+
+```
+pinets run [options] [file]
+```
+
+The `run` command executes a Pine Script indicator and outputs the results as JSON.
+
+### Indicator source
+
+Provide the indicator as a **file argument** or via **piped stdin**:
+
+```bash
+# From a file
+pinets run my_indicator.pine --symbol BTCUSDT
+
+# Piped from stdin (works on Linux, macOS, and Windows)
+cat my_indicator.pine | pinets run --symbol BTCUSDT
+```
+
+### Data source
+
+Choose between **live market data** or a **local JSON file**:
+
+```bash
+# Live data from Binance
+pinets run rsi.pine --symbol BTCUSDT --timeframe 60
+
+# Custom data from a JSON file
+pinets run rsi.pine --data ./my_candles.json
+```
+
+---
+
+## Options
+
+### Data Source
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| `--symbol <ticker>` | `-s` | Symbol to query (e.g., `BTCUSDT`, `ETHUSDT.P`) | &mdash; |
+| `--timeframe <tf>` | `-t` | Timeframe: `1`, `5`, `15`, `60`, `240`, `1D`, `1W`, `1M` | `60` |
+| `--data <path>` | `-d` | Path to a JSON data file (alternative to `--symbol`) | &mdash; |
+
+### Output
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| `--output <path>` | `-o` | Write output to a file instead of stdout | stdout |
+| `--format <type>` | `-f` | Output format: `default` or `full` | `default` |
+| `--pretty` | &mdash; | Force pretty-printed JSON | auto |
+
+### Candle Control
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| `--candles <count>` | `-n` | Number of candles in the output | `500` |
+| `--warmup <count>` | `-w` | Extra candles for indicator warmup (not included in output) | `0` |
+
+### Other
+
+| Option | Short | Description |
+|--------|-------|-------------|
+| `--debug` | &mdash; | Show the transpiled code (for debugging) |
+| `--quiet` | `-q` | Suppress all informational messages |
+| `--version` | `-v` | Show version number |
+| `--help` | `-h` | Show help |
+
+---
+
+## Examples
+
+### Basic indicator with live data
+
+```bash
+pinets run rsi.pine --symbol BTCUSDT --timeframe 1D --candles 100
+```
+
+### Indicator warmup
+
+Many indicators need historical data to initialize (e.g., a 200-period SMA needs at least 200 bars before producing meaningful output). Use `--warmup` to fetch extra candles that are processed but excluded from the output:
+
+```bash
+# Fetch 700 candles (200 warmup + 500 output), return only the last 500
+pinets run ema200.pine --symbol ETHUSDT --timeframe 60 --candles 500 --warmup 200
+```
+
+### Save output to a file
+
+```bash
+pinets run macd.pine --symbol BTCUSDT --timeframe 15 -o results.json
+```
+
+### Pipe into other tools
+
+```bash
+# Pretty-print with jq
+pinets run rsi.pine -s BTCUSDT -t 60 -q | jq '.plots'
+
+# Extract last RSI value
+pinets run rsi.pine -s BTCUSDT -t 60 -q | jq '.plots.RSI.data[-1].value'
+```
+
+### Use custom JSON data
+
+```bash
+pinets run my_indicator.pine --data ./historical_btc.json --candles 50 --pretty
+```
+
+### Pipe indicator from stdin
+
+```bash
+cat my_indicator.pine | pinets run --symbol BTCUSDT --timeframe 60
+
+# Or on Windows PowerShell
+Get-Content my_indicator.pine | pinets run --symbol BTCUSDT --timeframe 60
+```
+
+### Full execution context
+
+```bash
+pinets run rsi.pine --symbol BTCUSDT --format full --pretty
+```
+
+### Debug transpilation
+
+```bash
+pinets run my_indicator.pine --symbol BTCUSDT --debug
+```
+
+---
+
+## Output Formats
+
+### `default` format
+
+Contains the indicator metadata and all plot data:
+
+```json
+{
+  "indicator": {
+    "title": "RSI",
+    "overlay": false
+  },
+  "plots": {
+    "RSI": {
+      "title": "RSI",
+      "options": { "color": "#7E57C2" },
+      "data": [
+        { "time": 1704067200000, "value": 65.42 },
+        { "time": 1704070800000, "value": 62.18 }
+      ]
+    }
+  }
+}
+```
+
+### `full` format
+
+Everything in `default`, plus the raw execution result and market data:
+
+```json
+{
+  "indicator": { ... },
+  "plots": { ... },
+  "result": { ... },
+  "marketData": [
+    { "openTime": 1704067200000, "open": 42000, "high": 42500, "low": 41800, "close": 42300, "volume": 1234.5 },
+    ...
+  ]
+}
+```
+
+---
+
+## JSON Data Format
+
+When using `--data`, provide a JSON file with an array of candle objects:
+
+```json
+[
+  {
+    "openTime": 1704067200000,
+    "open": 42000.50,
+    "high": 42500.00,
+    "low": 41800.00,
+    "close": 42300.00,
+    "volume": 1234.56,
+    "closeTime": 1704070799999
+  }
+]
+```
+
+**Required fields**: `open`, `high`, `low`, `close`, `volume`
+
+**Recommended fields**: `openTime`, `closeTime` (millisecond timestamps)
+
+---
+
+## How It Works
+
+pinets-cli is a self-contained binary that bundles the [PineTS](https://github.com/QuantForgeOrg/PineTS) library. When you run an indicator:
+
+1. The Pine Script file is read and passed to the PineTS transpiler
+2. Market data is fetched from Binance (or loaded from your JSON file)
+3. The indicator is executed bar-by-bar with full time-series semantics
+4. Plot data is collected and output as structured JSON
+
+There are no runtime dependencies. The single bundled file includes everything needed.
+
+---
+
+## Supported Timeframes
+
+| Value | Description |
+|-------|-------------|
+| `1` | 1 minute |
+| `3` | 3 minutes |
+| `5` | 5 minutes |
+| `15` | 15 minutes |
+| `30` | 30 minutes |
+| `60` | 1 hour |
+| `120` | 2 hours |
+| `240` | 4 hours |
+| `1D` or `D` | 1 day |
+| `1W` or `W` | 1 week |
+| `1M` or `M` | 1 month |
+
+---
+
+## Related Projects
+
+- **[PineTS](https://github.com/QuantForgeOrg/PineTS)** : The underlying transpiler and runtime engine
+- **[QFChart](https://github.com/QuantForgeOrg/QFChart)** : Charting library optimized for PineTS visualization
+
+---
+
+## Contributing
+
+Contributions are welcome! Please feel free to open issues or submit pull requests.
+
+---
+
+## License
+
+AGPL-3.0 - See [LICENSE](LICENSE) for details.
+
+---
+
+<p align="center">
+  <sub>Built with <a href="https://github.com/QuantForgeOrg/PineTS">PineTS</a> by <a href="https://quantforge.org">QuantForge</a></sub>
+</p>

@@ -1,0 +1,52 @@
+{
+  "name": "pinets-cli",
+  "version": "0.1.0",
+  "description": "A CLI wrapper for PineTS that lets you run Pine Script indicators directly from the command line.",
+  "keywords": [
+    "Pine",
+    "Script",
+    "PineTS",
+    "Indicators",
+    "Finance",
+    "Quant",
+    "Trading",
+    "Backtesting",
+    "CLI"
+  ],
+  "homepage": "https://github.com/QuantForgeOrg/pinets-cli#readme",
+  "bugs": {
+    "url": "https://github.com/QuantForgeOrg/pinets-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuantForgeOrg/pinets-cli.git"
+  },
+  "license": "AGPL-3.0-or-later",
+  "author": "Alaa-eddine KADDOURI",
+  "type": "module",
+  "bin": {
+    "pinets": "./dist/pinets-cli.min.cjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "cross-env BUILD=prod rollup -c",
+    "build:dev": "cross-env BUILD=dev rollup -c",
+    "build:prod": "cross-env BUILD=prod rollup -c",
+    "clean": "rimraf dist"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "commander": "^14.0.3",
+    "cross-env": "^10.1.0",
+    "esbuild": "^0.25.0",
+    "pinets": "^0.8.9",
+    "rimraf": "^6.0.0",
+    "rollup": "^4.30.0",
+    "rollup-plugin-esbuild": "^6.2.0",
+    "typescript": "^5.7.0"
+  }
+}
