@@ -1,9 +1,12 @@
 import { program } from "commander";
 import { runCommand } from "./run";
 import { checkForUpdate } from "./update";
+import packageJson from "../package.json";
 
-const VERSION = "0.1.0";
-const PACKAGE_NAME = "pinets-cli";
+const VERSION = packageJson.version;
+const PACKAGE_NAME = packageJson.name;
+const COPYRIGHT = "Copyright (c) 2026 QuantForge.org";
+const VERSION_TEXT = `pinets cli v${VERSION}\n${COPYRIGHT}`;
 
 async function main() {
   // Fire update check early — it runs in the background and never blocks execution
@@ -12,7 +15,8 @@ async function main() {
   program
     .name("pinets")
     .description("CLI for running Pine Script indicators via PineTS")
-    .version(VERSION, "-v, --version");
+    .version(VERSION_TEXT, "-v, --version")
+    .addHelpText("after", `\n${VERSION_TEXT}`);
 
   program
     .command("run")

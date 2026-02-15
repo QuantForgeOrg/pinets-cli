@@ -25,7 +25,8 @@
   "author": "Alaa-eddine KADDOURI",
   "type": "module",
   "bin": {
-    "pinets": "./dist/pinets-cli.min.cjs"
+    "pinets": "./dist/pinets-cli.min.cjs",
+    "pinets-cli": "./dist/pinets-cli.min.cjs"
   },
   "files": [
     "dist"
