@@ -7,6 +7,7 @@
   <a href="https://www.npmjs.com/package/pinets-cli"><img src="https://img.shields.io/npm/v/pinets-cli.svg?style=flat-square" alt="npm version"></a>
   <a href="https://opensource.org/licenses/AGPL-3.0"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg?style=flat-square" alt="License"></a>
   <a href="https://github.com/QuantForgeOrg/PineTS"><img src="https://img.shields.io/badge/powered%20by-PineTS-blue?style=flat-square" alt="Powered by PineTS"></a>
+  <a href="https://www.reddit.com/r/QuantForge/"><img src="https://img.shields.io/reddit/subreddit-subscribers/QuantForge?style=flat-square&logo=reddit" alt="Reddit"></a>  
 </p>
 
 <p align="center">
@@ -106,37 +107,37 @@ pinets run rsi.pine --data ./my_candles.json
 
 ### Data Source
 
-| Option | Short | Description | Default |
-|--------|-------|-------------|---------|
-| `--symbol <ticker>` | `-s` | Symbol to query (e.g., `BTCUSDT`, `ETHUSDT.P`) | &mdash; |
-| `--timeframe <tf>` | `-t` | Timeframe: `1`, `5`, `15`, `60`, `240`, `1D`, `1W`, `1M` | `60` |
-| `--data <path>` | `-d` | Path to a JSON data file (alternative to `--symbol`) | &mdash; |
+| Option              | Short | Description                                              | Default |
+| ------------------- | ----- | -------------------------------------------------------- | ------- |
+| `--symbol <ticker>` | `-s`  | Symbol to query (e.g., `BTCUSDT`, `ETHUSDT.P`)           | &mdash; |
+| `--timeframe <tf>`  | `-t`  | Timeframe: `1`, `5`, `15`, `60`, `240`, `1D`, `1W`, `1M` | `60`    |
+| `--data <path>`     | `-d`  | Path to a JSON data file (alternative to `--symbol`)     | &mdash; |
 
 ### Output
 
-| Option | Short | Description | Default |
-|--------|-------|-------------|---------|
-| `--output <path>` | `-o` | Write output to a file instead of stdout | stdout |
-| `--format <type>` | `-f` | Output format: `default` or `full` | `default` |
-| `--pretty` | &mdash; | Force pretty-printed JSON | auto |
-| `--clean` | &mdash; | Filter out null, false, and empty values from plots | &mdash; |
-| `--plots <names>` | &mdash; | Comma-separated list of plot names to include | all plots |
+| Option            | Short   | Description                                         | Default   |
+| ----------------- | ------- | --------------------------------------------------- | --------- |
+| `--output <path>` | `-o`    | Write output to a file instead of stdout            | stdout    |
+| `--format <type>` | `-f`    | Output format: `default` or `full`                  | `default` |
+| `--pretty`        | &mdash; | Force pretty-printed JSON                           | auto      |
+| `--clean`         | &mdash; | Filter out null, false, and empty values from plots | &mdash;   |
+| `--plots <names>` | &mdash; | Comma-separated list of plot names to include       | all plots |
 
 ### Candle Control
 
-| Option | Short | Description | Default |
-|--------|-------|-------------|---------|
-| `--candles <count>` | `-n` | Number of candles in the output | `500` |
-| `--warmup <count>` | `-w` | Extra candles for indicator warmup (not included in output) | `0` |
+| Option              | Short | Description                                                 | Default |
+| ------------------- | ----- | ----------------------------------------------------------- | ------- |
+| `--candles <count>` | `-n`  | Number of candles in the output                             | `500`   |
+| `--warmup <count>`  | `-w`  | Extra candles for indicator warmup (not included in output) | `0`     |
 
 ### Other
 
-| Option | Short | Description |
-|--------|-------|-------------|
-| `--debug` | &mdash; | Show the transpiled code (for debugging) |
-| `--quiet` | `-q` | Suppress all informational messages |
-| `--version` | `-v` | Show version number |
-| `--help` | `-h` | Show help |
+| Option      | Short   | Description                              |
+| ----------- | ------- | ---------------------------------------- |
+| `--debug`   | &mdash; | Show the transpiled code (for debugging) |
+| `--quiet`   | `-q`    | Suppress all informational messages      |
+| `--version` | `-v`    | Show version number                      |
+| `--help`    | `-h`    | Show help                                |
 
 ---
 
@@ -277,10 +278,10 @@ When using `--data`, provide a JSON file with an array of candle objects:
 [
   {
     "openTime": 1704067200000,
-    "open": 42000.50,
-    "high": 42500.00,
-    "low": 41800.00,
-    "close": 42300.00,
+    "open": 42000.5,
+    "high": 42500.0,
+    "low": 41800.0,
+    "close": 42300.0,
     "volume": 1234.56,
     "closeTime": 1704070799999
   }
@@ -308,19 +309,19 @@ There are no runtime dependencies. The single bundled file includes everything n
 
 ## Supported Timeframes
 
-| Value | Description |
-|-------|-------------|
-| `1` | 1 minute |
-| `3` | 3 minutes |
-| `5` | 5 minutes |
-| `15` | 15 minutes |
-| `30` | 30 minutes |
-| `60` | 1 hour |
-| `120` | 2 hours |
-| `240` | 4 hours |
-| `1D` or `D` | 1 day |
-| `1W` or `W` | 1 week |
-| `1M` or `M` | 1 month |
+| Value       | Description |
+| ----------- | ----------- |
+| `1`         | 1 minute    |
+| `3`         | 3 minutes   |
+| `5`         | 5 minutes   |
+| `15`        | 15 minutes  |
+| `30`        | 30 minutes  |
+| `60`        | 1 hour      |
+| `120`       | 2 hours     |
+| `240`       | 4 hours     |
+| `1D` or `D` | 1 day       |
+| `1W` or `W` | 1 week      |
+| `1M` or `M` | 1 month     |
 
 ---
 
