@@ -344,5 +344,5 @@ AGPL-3.0 - See [LICENSE](LICENSE) for details.
 ---
 
 <p align="center">
-  <sub>Built with <a href="https://github.com/QuantForgeOrg/PineTS">PineTS</a> by <a href="https://quantforge.org">QuantForge</a></sub>
+  <sub>Built with <a href="https://github.com/LuxAlgo/PineTS">PineTS</a> by <a href="https://luxalgo.com">LuxAlgo</a></sub>
 </p>
