@@ -1,6 +1,6 @@
 {
   "name": "pinets-cli",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "A CLI wrapper for PineTS that lets you run Pine Script indicators directly from the command line.",
   "keywords": [
     "Pine",
@@ -47,7 +47,7 @@
     "commander": "^14.0.3",
     "cross-env": "^10.1.0",
     "esbuild": "^0.25.0",
-    "pinets": "^0.9.10",
+    "pinets": "^0.9.17",
     "rimraf": "^6.0.0",
     "rollup": "^4.30.0",
     "rollup-plugin-esbuild": "^6.2.0",
