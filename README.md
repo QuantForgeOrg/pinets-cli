@@ -6,8 +6,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/pinets-cli"><img src="https://img.shields.io/npm/v/pinets-cli.svg?style=flat-square" alt="npm version"></a>
   <a href="https://opensource.org/licenses/AGPL-3.0"><img src="https://img.shields.io/badge/License-AGPL--3.0-blue.svg?style=flat-square" alt="License"></a>
-  <a href="https://github.com/QuantForgeOrg/PineTS"><img src="https://img.shields.io/badge/powered%20by-PineTS-blue?style=flat-square" alt="Powered by PineTS"></a>
-  <a href="https://www.reddit.com/r/QuantForge/"><img src="https://img.shields.io/reddit/subreddit-subscribers/QuantForge?style=flat-square&logo=reddit" alt="Reddit"></a>  
+  <a href="https://github.com/LuxAlgo/PineTS"><img src="https://img.shields.io/badge/powered%20by-PineTS-blue?style=flat-square" alt="Powered by PineTS"></a>
 </p>
 
 <p align="center">
