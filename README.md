@@ -1,6 +1,7 @@
+<h1 align="center">pinets-cli</h1>
+
 <p align="center">
-  <strong>pinets-cli</strong><br>
-  Run Pine Script indicators from the command line
+  Run Pine Script® indicators from the command line
 </p>
 
 <p align="center">
@@ -14,6 +15,7 @@
   <a href="#usage">Usage</a> &bull;
   <a href="#options">Options</a> &bull;
   <a href="#examples">Examples</a> &bull;
+  <a href="#use-with-ai-agents">AI Agents</a> &bull;
   <a href="docs/README.md">Full Docs</a>
 </p>
 
@@ -21,13 +23,15 @@
 
 ## What is pinets-cli?
 
-**pinets-cli** is a command-line interface for [PineTS](https://github.com/QuantForgeOrg/PineTS), the open-source Pine Script transpiler and runtime. It lets you execute TradingView Pine Script indicators directly from your terminal, with live market data or custom JSON datasets.
+**pinets-cli** is a command-line interface for [PineTS](https://github.com/LuxAlgo/PineTS), the open-source Pine Script® transpiler and runtime. It lets you execute TradingView® Pine Script® indicators directly from your terminal, with live market data or custom JSON datasets.
 
 ```bash
 pinets run rsi.pine --symbol BTCUSDT --timeframe 60
 ```
 
 No code to write. No project to set up. Just point it at a `.pine` file and go.
+
+> _**Disclaimer**: pinets-cli and PineTS are independently developed open-source projects. LuxAlgo Global, LLC and the PineTS project are NOT affiliated with, sponsored by, endorsed by, or in any way officially associated with TradingView, Inc. "Pine Script®" and "TradingView®" are registered trademarks of TradingView, Inc._
 
 ---
 
@@ -74,7 +78,7 @@ That's it. You'll get JSON output with the calculated SMA values for the last 50
 pinets run [options] [file]
 ```
 
-The `run` command executes a Pine Script indicator and outputs the results as JSON.
+The `run` command executes a Pine Script® indicator and outputs the results as JSON.
 
 ### Indicator source
 
@@ -226,6 +230,29 @@ pinets run signals.pine -s BTCUSDT --plots "Buy,Sell" --clean -q | jq '.plots'
 
 ---
 
+## Use with AI agents
+
+pinets-cli is designed to be driven programmatically. Indicators go in on stdin, structured JSON comes out on stdout, and there is no interactive prompt or project scaffolding to negotiate — which makes it usable as a tool call from an agent, a script, or a CI job without a wrapper.
+
+A `SKILL.md` is included in the repository root for agent frameworks that consume skill definitions.
+
+Three flags matter when an agent is the caller:
+
+| Flag              | Why it matters for automated callers                                     |
+| ----------------- | ------------------------------------------------------------------------ |
+| `--quiet` / `-q`  | Suppresses informational output so stdout is valid JSON and nothing else  |
+| `--clean`         | Drops null, false, and empty plot values, cutting response size sharply   |
+| `--plots <names>` | Returns only the plots you asked for instead of everything the script emits |
+
+```bash
+# Generate an indicator, execute it, and return only the signal values
+cat generated_strategy.pine | pinets run -s BTCUSDT -t 60 --plots "Buy,Sell" --clean -q
+```
+
+Because the runtime is self-contained and reads from stdin, the whole loop &mdash; write a script, execute it against real data, read the result &mdash; can run locally without a charting platform in the path.
+
+---
+
 ## Output Formats
 
 ### `default` format
@@ -295,9 +322,9 @@ When using `--data`, provide a JSON file with an array of candle objects:
 
 ## How It Works
 
-pinets-cli is a self-contained binary that bundles the [PineTS](https://github.com/QuantForgeOrg/PineTS) library. When you run an indicator:
+pinets-cli is a self-contained binary that bundles the [PineTS](https://github.com/LuxAlgo/PineTS) library. When you run an indicator:
 
-1. The Pine Script file is read and passed to the PineTS transpiler
+1. The Pine Script® file is read and passed to the PineTS transpiler
 2. Market data is fetched from Binance (or loaded from your JSON file)
 3. The indicator is executed bar-by-bar with full time-series semantics
 4. Plot data is collected and output as structured JSON
@@ -326,8 +353,7 @@ There are no runtime dependencies. The single bundled file includes everything n
 
 ## Related Projects
 
-- **[PineTS](https://github.com/QuantForgeOrg/PineTS)** : The underlying transpiler and runtime engine
-- **[QFChart](https://github.com/QuantForgeOrg/QFChart)** : Charting library optimized for PineTS visualization
+- **[PineTS](https://github.com/LuxAlgo/PineTS)** : The underlying transpiler and runtime engine
 
 ---
 
@@ -339,7 +365,7 @@ Contributions are welcome! Please feel free to open issues or submit pull reques
 
 ## License
 
-AGPL-3.0 - See [LICENSE](LICENSE) for details.
+AGPL-3.0-or-later - See [LICENSE](LICENSE) for details.
 
 ---
 
